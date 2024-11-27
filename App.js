@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, SafeAreaView, Platform, TouchableOpacity, TextI
 import Header from './src/components/Header';
 import Timer from './src/components/Timer';
 import { Audio } from 'expo-av';
+import { StatusBar } from 'expo-status-bar';
 
 const colors = ["#f7dc6f", "#a2d9ce", "#d7bde2"]
 
@@ -74,6 +75,7 @@ export default function App() {
 
   return (
     <SafeAreaView style={[styles.containerArea, { backgroundColor: colors[currentTime] }]}>
+      <StatusBar style="dark" />
       <View style={styles.container}>
 
         <Text style={styles.text}>Pomodoro!</Text>
