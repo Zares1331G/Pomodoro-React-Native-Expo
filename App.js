@@ -31,7 +31,7 @@ export default function App() {
   }
 
   const handleReset = () => {
-    setTime(memoryTimeInput)
+    setTime(memoryTimeInput * 60)
   }
 
   const handleInputTime = (time) => {
@@ -50,7 +50,6 @@ export default function App() {
   const handleFocus = () => {
     setIsFocused(true);
   };
-
   //********** */
 
   useEffect(() => {
@@ -139,7 +138,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 15,
     backgroundColor: "white",
-    marginTop:10
+    marginTop: 10
   },
   inputActive: {
     borderColor: "blue",
