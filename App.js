@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, Platform, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Platform, TouchableOpacity, TextInput, Keyboard } from 'react-native';
 import Header from './src/components/Header';
 import Timer from './src/components/Timer';
 import { Audio } from 'expo-av';
@@ -12,6 +12,9 @@ export default function App() {
   const [time, setTime] = useState(60 * 60)
   const [currentTime, setCurrentTime] = useState("POMO" | "SHORT" | "BREAK")
   const [isActive, setIsActive] = useState(false)
+  const [newTimeInput, setNewTimeInput] = useState();
+  const [memoryTimeInput, setMemoryTimeInput] = useState(time);
+  const [isFocused, setIsFocused] = useState(false); //Refactor
 
   const playSound = async () => {
     const { sound } = await Audio.Sound.createAsync(
@@ -24,7 +27,31 @@ export default function App() {
   const handleStartStop = () => {
     playSound()
     setIsActive(prev => !prev)
+    setNewTimeInput(0)
   }
+
+  const handleReset = () => {
+    setTime(memoryTimeInput)
+  }
+
+  const handleInputTime = (time) => {
+    setNewTimeInput(time);
+    setMemoryTimeInput(time)
+
+    setTime(time * 60)
+  };
+
+  //Refactor
+  const handleBlur = () => {
+    setIsFocused(false);
+    Keyboard.dismiss(); // Cierra el teclado
+  };
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  //********** */
 
   useEffect(() => {
     let interval = null
@@ -57,9 +84,25 @@ export default function App() {
           setTime={setTime}
         />
         <Timer time={time} />
-        {/* <TextInput type="number" /> */}
+
+        <TextInput
+          style={[
+            styles.input,
+            isFocused ? styles.inputActive : styles.inputInactive,
+          ]}
+          keyboardType="numeric"
+          onChangeText={handleInputTime}
+          value={newTimeInput}
+          placeholder="Ingrese un número"
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+        />
+
         <TouchableOpacity style={styles.constinerButton} onPress={handleStartStop}>
           <Text style={[styles.button]}>{isActive ? "Stop" : "Start"}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.constinerButton} onPress={handleReset}>
+          <Text style={[styles.button]}>Reset</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -87,5 +130,21 @@ const styles = StyleSheet.create({
   button: {
     color: "white",
     fontWeight: "bold"
-  }
+  },
+  input: {
+    height: 40,
+    width: "100%",
+    borderColor: "gray",
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    borderRadius: 15,
+    backgroundColor: "white",
+    marginTop:10
+  },
+  inputActive: {
+    borderColor: "blue",
+  },
+  inputInactive: {
+    borderColor: "gray",
+  },
 });
