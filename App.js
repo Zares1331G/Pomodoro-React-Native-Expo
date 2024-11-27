@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   constinerButton: {
     backgroundColor: "#333",
     padding: 15,
-    marginVertical: 20,
+    marginTop: 20,
     borderRadius: 15,
     alignItems: "center"
   },
